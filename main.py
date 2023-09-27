@@ -11,15 +11,15 @@ load_dotenv()
 gmaps = googlemaps.Client(key=os.getenv('GOOGLE_MAPS_API_KEY'))
 
 st.title('遅刻しなAI')
-
+st.write("このアプリは予定通知メールなどの本文からコピペでカレンダー登録と予定地までの電車経路のURLを生成するアプリです。")
 
 departure_point = st.text_input("出発地点:", placeholder="住所または新宿駅など駅名を入力")
 # st.caption("住所や新宿駅など駅名を入力")
-event_info = st.text_area("イベント情報:", placeholder="スケジュール内容をコピペ\n予定名：全日本模型ホビーショー\n場所：東京ビッグサイト 南1・2ホール\n日時：2023年9月30日 14:00\n\nまたは日付けと目的地が入った文章を入力\n10/15 18時から渋谷集合で", height=250)
+event_info = st.text_area("予定情報:", placeholder="スケジュール内容をコピペ\n予定名：全日本模型ホビーショー\n場所：東京ビッグサイト 南1・2ホール\n日時：2023年9月30日 14:00\n\nまたは日付けと目的地が入った文章を入力\n10/15 18時から渋谷集合で", height=250)
 # st.caption("スケジュール内容をコピペ → 予定名：全日本模型ホビーショー\n場所：東京ビッグサイト 南1・2ホール\n日時：2023年9月30日 14:00")
 # st.caption("または日付けと目的地が入った文章を入力 → 10/15 18時から渋谷集合で")
 
-if st.button("経路URL生成"):
+if st.button("URL生成"):
     
     place_response, times_response, event_response = extract_event_details(event_info)  # 関数を呼び出し
     arrival_point = place_response  # 到着地点にplace_responseを格納
