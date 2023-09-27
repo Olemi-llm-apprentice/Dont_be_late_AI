@@ -9,8 +9,10 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 
 def extract_event_details(input_event_data):
 
-    current_year = datetime.now().year
-
+    current_datetime = datetime.now()
+    # current_year = datetime.now().year
+    #If the year number cannot be confirmed, {current_year} should be used.
+    
     place_prompt = f'''
     Overview:
     Review the event details from the provided text and extract only the event location.
@@ -46,7 +48,7 @@ def extract_event_details(input_event_data):
     Parameters:
 
     dates: Event start times. 
-    If the year number cannot be confirmed, {current_year} should be used.
+    If the year, month, etc. cannot be confirmed, {current_datetime} is used as the current time for reference.
 
     Output:
     Output the extracted event start time in the format "YYYYY,MM,DD,HH,MM,SS".
