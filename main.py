@@ -4,6 +4,8 @@ import googlemaps
 from datetime import datetime, timedelta, timezone
 import streamlit as st
 from llm import extract_event_details
+# import pandas as pd
+
 
 load_dotenv()
 gmaps = googlemaps.Client(key=os.getenv('GOOGLE_MAPS_API_KEY'))
@@ -46,4 +48,16 @@ if st.button("経路URL生成"):
     # st.write(f"到着地点座標: {arrival_lat_lng}")
     # st.write(f"UNIXタイムスタンプ: {unix_timestamp}")
     st.write(f"Google Maps URL: {google_maps_url}")
+    
+    
+    # departure_lat = departure_location[0]['geometry']['location']['lat']
+    # departure_lon = departure_location[0]['geometry']['location']['lng']
+    # arrival_lat = arrival_location[0]['geometry']['location']['lat']
+    # arrival_lon = arrival_location[0]['geometry']['location']['lng']
+    
+    # map_data = pd.DataFrame({
+    # 'lat': [departure_lat, arrival_lat],
+    # 'lon': [departure_lon, arrival_lon]
+    # })
+    # st.map(map_data)
     
