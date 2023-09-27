@@ -21,7 +21,7 @@ event_info = st.text_area("イベント情報:", placeholder="スケジュール
 
 if st.button("経路URL生成"):
     
-    place_response, times_response = extract_event_details(event_info)  # 関数を呼び出し
+    place_response, times_response, event_response = extract_event_details(event_info)  # 関数を呼び出し
     arrival_point = place_response  # 到着地点にplace_responseを格納
     
     # times_responseをdatetimeオブジェクトに変換
@@ -47,8 +47,8 @@ if st.button("経路URL生成"):
     # st.write(f"出発地点座標: {departure_lat_lng}")
     # st.write(f"到着地点座標: {arrival_lat_lng}")
     # st.write(f"UNIXタイムスタンプ: {unix_timestamp}")
-    st.write(f"Google Maps URL: {google_maps_url}")
-    
+    st.write(f"Google Maps 乗換経路 URL: {google_maps_url}")
+    st.write(f"Google Calendar 登録 URL:\n {event_response}")
     
     # departure_lat = departure_location[0]['geometry']['location']['lat']
     # departure_lon = departure_location[0]['geometry']['location']['lng']
