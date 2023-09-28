@@ -1,13 +1,14 @@
 import os
 from dotenv import load_dotenv
 import openai
-from datetime import datetime
+from datetime import datetime , timedelta
 import re
 
 # APIの初期設定
 load_dotenv()
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
+input_event_data = input("イベントデータを入力してください: ")
 
 def extract_event_details(input_event_data):
 
@@ -181,3 +182,6 @@ def extract_event_details(input_event_data):
     
     return place_response, times_response, event_response
 
+place_response, times_response, event_response = extract_event_details(input_event_data)  # 関数を呼び出し
+print(times_response)
+print(event_response)
