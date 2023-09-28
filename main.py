@@ -30,8 +30,8 @@ if st.button("URL生成"):
         arrival_point = place_response  # 到着地点にplace_responseを格納
         
         # times_responseをdatetimeオブジェクトに変換
-        year, month, day, hour, minute, second = map(int, times_response.split(','))
-        arrival_datetime = datetime(year, month, day, hour, minute, second) - timedelta(minutes=10)
+        # year, month, day, hour, minute, second = map(int, times_response.split(','))
+        arrival_datetime = times_response - timedelta(minutes=10)
         
         # UNIXタイムスタンプ計算
         jst_offset = timedelta(hours=9)  # JSTはUTC+9
