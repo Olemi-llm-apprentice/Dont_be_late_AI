@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 import openai
-from datetime import datetime
+from datetime import datetime, timedelta
 import re
 
 # APIの初期設定
