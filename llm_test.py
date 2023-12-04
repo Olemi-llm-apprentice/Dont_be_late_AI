@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+import googlemaps
 import openai
 from datetime import datetime , timedelta
 import re
@@ -14,6 +15,8 @@ def extract_event_details(input_event_data):
 
     
     current_datetime = datetime.now()
+    current_weekday = current_datetime.strftime('%A')
+    print(f"現在の日付と時間: {current_datetime}, 曜日: {current_weekday}")
 
     # current_year = datetime.now().year
     #If the year number cannot be confirmed, {current_year} should be used.
@@ -53,7 +56,7 @@ def extract_event_details(input_event_data):
     Parameters:
 
     dates: Event start times. 
-    If the year, month, etc. cannot be confirmed, {current_datetime} is used as the current time for reference.
+    If the year, month, etc. cannot be confirmed, {current_datetime} and {current_weekday} are used as the current time and day of the week for reference.
 
     Output:
     Output the extracted event start time in the format "YYYYY,MM,DD,HH,MM,SS".
@@ -136,8 +139,9 @@ def extract_event_details(input_event_data):
     Convert details to Google Calendar URL parameters:
 
     Default timezone is Asia/Tokyo unless specified.
-    The start time of the event is determined by {times_response} and is expressed as {jp_start_time_str} considering the time zone.
+    The start time of the event is determined by {times_response} {current_weekday} and is expressed as {jp_start_time_str} considering the time zone.
     If the end time isn't provided, make an educated guess based on the event type (e.g., for lunch, it is 2 hours and is represented as {Sample_Scheduled_time}).
+    A week is defined as starting on Monday and ending on Sunday.
     
     Parameters:
 
