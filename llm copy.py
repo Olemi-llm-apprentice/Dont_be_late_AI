@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 from datetime import datetime, timedelta
+import re
 import json
 
 # APIの初期設定
@@ -17,7 +18,10 @@ def extract_event_details(input_event_data):
     
     current_datetime = datetime.now()
     current_weekday = current_datetime.strftime('%A')
-  
+
+    # current_year = datetime.now().year
+    #If the year number cannot be confirmed, {current_year} should be used.
+    
     place_prompt = f'''
     Overview:
     Review the event details from the provided text and extract only the event location.
@@ -89,8 +93,14 @@ def extract_event_details(input_event_data):
     place_response = place_response.choices[0].message.content
     
     place_response = json.loads(place_response)
+    
     place_response = next(iter(place_response.values()))
 
+    # if place_response.startswith("Output:\n\n"):
+    #     place_response = place_response[len("Output:\n\n"):]
+        
+
+    # print(place_response)
 
     # モデルを呼び出し、レスポンスを取得
     times_response = client.chat.completions.create(
@@ -105,8 +115,14 @@ def extract_event_details(input_event_data):
     times_response = times_response.choices[0].message.content
     
     times_response = json.loads(times_response)
+    
     times_response = next(iter(times_response.values()))
 
+    # if times_response.startswith("Output:\n\n"):
+    #     times_response = times_response[len("Output:\n\n"):]
+
+    # if times_response.startswith("Output:\n"):
+    #     times_response = times_response[len("Output:\n"):]
 
     # times_responseをdatetimeオブジェクトに変換
     year, month, day, hour, minute, second = map(int, times_response.split(','))
@@ -182,6 +198,19 @@ def extract_event_details(input_event_data):
     
     event_response = next(iter(event_response.values()))
     
+    # if event_response.startswith("Output:\n\n"):
+    #     event_response = event_response[len("Output:\n\n"):]
+
+    # if event_response.startswith("Output:\n"):
+    #     event_response = event_response[len("Output:\n"):]
+
+    # if event_response.startswith("Output:"):
+    #     event_response = event_response[len("Output:\n"):]
+        
+    # if ' ' in event_response or '　' in event_response:
+    #     event_response = re.sub(r'[ 　]', '', event_response)
+    # else:
+    #     event_response = event_response
     
     return place_response, times_response, event_response
 
@@ -189,6 +218,8 @@ def calendar_registration(input_event_data):
     
     current_datetime = datetime.now()
     current_weekday = current_datetime.strftime('%A')
+
+    # import pdb; pdb.set_trace()
 
     times_prompt = f'''
     Overview:
@@ -215,6 +246,7 @@ def calendar_registration(input_event_data):
     ====
     Input:
     '''
+        # Please output in JSON format.
     
     times_message=[
             {"role": "system", "content": times_prompt},
@@ -232,6 +264,7 @@ def calendar_registration(input_event_data):
         max_tokens=1000
     )
 
+    # import pdb; pdb.set_trace()
     # レスポンスからテキスト部分を取り出す
     times_response = times_response.choices[0].message.content
 
@@ -239,6 +272,12 @@ def calendar_registration(input_event_data):
     
     times_response = next(iter(times_response.values()))
     
+    # if times_response.startswith("Output:\n\n"):
+    #     times_response = times_response[len("Output:\n\n"):]
+
+    # if times_response.startswith("Output:\n"):
+    #     times_response = times_response[len("Output:\n"):]
+
     # times_responseをdatetimeオブジェクトに変換
     year, month, day, hour, minute, second = map(int, times_response.split(','))
     times_response = datetime(year, month, day, hour, minute, second)
@@ -291,13 +330,15 @@ def calendar_registration(input_event_data):
 
     Input:
     '''
-
+        # Google Calendar event URL matching the input text language.
     
     event_message=[
             {"role": "system", "content":event_prompt},
             {"role": "user", "content":input_event_data},
         ]
-
+    
+    
+    # print(times_response)
     
         # モデルを呼び出し、レスポンスを取得
     event_response = client.chat.completions.create(
@@ -314,5 +355,18 @@ def calendar_registration(input_event_data):
     
     event_response = next(iter(event_response.values()))
     
+    # if event_response.startswith("Output:\n\n"):
+    #     event_response = event_response[len("Output:\n\n"):]
+
+    # if event_response.startswith("Output:\n"):
+    #     event_response = event_response[len("Output:\n"):]
+
+    # if event_response.startswith("Output:"):
+    #     event_response = event_response[len("Output:\n"):]
+        
+    # if ' ' in event_response or '　' in event_response:
+    #     event_response = re.sub(r'[ 　]', '', event_response)
+    # else:
+    #     event_response = event_response
     
     return event_response
